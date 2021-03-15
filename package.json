@@ -1,0 +1,19 @@
+{
+  "name": "imc",
+  "version": "1.0.0",
+  "description": "sistema baseado em electronJS desenvolvido para calcular IMC",
+  "main": "main.js",
+  "scripts": {
+    "test": "electron ./src/main.js"
+  },
+  "keywords": [
+    "IMG",
+    "electronJS",
+    "calculo_IMC"
+  ],
+  "author": "Lucas Medeiros",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^11.3.0"
+  }
+}

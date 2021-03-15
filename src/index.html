@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form">
+        <div class="form-control">
+          <label for="height">Altura</label>
+          <input type="text" name="" id="height" />
+        </div>
+
+        <div class="form-control">
+          <label for="weight">Peso</label>
+          <input type="text" name="" id="weight" />
+        </div>
+
+        <div class="btn-control">
+          <button id="calculate">Calcular</button>
+        </div>
+      </div>
+      <div class="response-div">
+        <h1 id="title">Resultado</h1>
+        <p id="response"></p>
+        <div class="image"></div>
+      </div>
+    </div>
+
+    <script>
+      const electron = require("electron");
+      const { ipcRenderer } = electron;
+
+      let height = document.querySelector("#height");
+      let weight = document.querySelector("#weight");
+      let title = document.querySelector("#title");
+      let response = document.querySelector("#response");
+      let calculate = document.querySelector("#calculate");
+      let image = document.querySelector(".image");
+
+      calculate.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        let heightValue = parseFloat(height.value.replace(",", "."));
+        let weightValue = parseFloat(weight.value.replace(",", "."));
+        ipcRenderer.send("calculate", heightValue, weightValue);
+      });
+
+      ipcRenderer.on("imc", (event, imc) => {
+        document.getElementsByClassName("response-div")[0].style.cssText =`display: flex;
+                                                                          align-items: center;
+                                                                          justify-content: center;
+                                                                          flex-direction: column;`
+        title.innerHTML = `IMC ${parseFloat(imc.toFixed(2))}`;
+
+        if (imc <= 16) {
+          response.innerHTML = "Magreza grave";
+          image.style.cssText = `background-position: -6px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 16.01 && imc <= 16.99) {
+          response.innerHTML = "Magreza moderada";
+          image.style.cssText = `background-position: -6px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 17 && imc <= 18.49) {
+          response.innerHTML = "Magreza leve";
+          image.style.cssText = `background-position: -6px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 18.5 && imc <= 24.99) {
+          response.innerHTML = "Normal";
+          image.style.cssText = `background-position: -117px -12px;
+  height: 340px;
+  width: 114px;`;
+          
+        }
+
+        if (imc >= 25 && imc <= 29.99) {
+          response.innerHTML = "Sobrepeso";
+          image.style.cssText = `background-position: -230px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 30 && imc <= 34.99) {
+          response.innerHTML = "Obesidade Grau I";
+          image.style.cssText = `    background-position: -340px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 35 && imc <= 39.99) {
+          response.innerHTML = "Obesidade Grau II (severa)";
+          image.style.cssText = `background-position: -454px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+
+        if (imc >= 40) {
+          response.innerHTML = "Obesidade Grau III (mórbida)";
+          image.style.cssText = `background-position: -567px -12px;
+  height: 340px;
+  width: 114px;`;
+        }
+      });
+    </script>
+  </body>
+</html>
